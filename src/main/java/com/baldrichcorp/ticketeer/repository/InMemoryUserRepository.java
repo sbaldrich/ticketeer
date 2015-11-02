@@ -18,7 +18,7 @@ public class InMemoryUserRepository implements UserRepository{
   
   @Override
   public String getPasswordForUser(String handle) {
-    return this.userDatabase.get("handle");
+    return this.userDatabase.get(handle);
   }
 
   @Override

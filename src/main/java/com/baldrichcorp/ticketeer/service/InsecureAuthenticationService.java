@@ -24,22 +24,22 @@ public class InsecureAuthenticationService implements AuthenticationService {
   }
 
   @Override
-  public Principal authenticate(String username, String password) {
-    String currentPassword = this.userRepository.getPasswordForUser(username);
+  public Principal authenticate(String handle, String password) {
+    String currentPassword = this.userRepository.getPasswordForUser(handle);
   
     if (currentPassword == null) {
-      logger.warn("Authentication failed for non-existent user {}.", username);
+      logger.warn("Authentication failed for non-existent user {}.", handle);
       return null;
     }
 
     if (!currentPassword.equals(password)) {
-      logger.warn("Authentication failed for user {}.", username);
+      logger.warn("Authentication failed for user {}.", handle);
       return null;
     }
 
-    logger.debug("User {} successfully authenticated.", username);
+    logger.debug("User {} successfully authenticated.", handle);
 
-    return new UserPrincipal(username);
+    return new UserPrincipal(handle);
   }
 
 }
