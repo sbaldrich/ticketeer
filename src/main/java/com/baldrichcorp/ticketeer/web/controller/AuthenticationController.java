@@ -24,11 +24,6 @@ public class AuthenticationController {
   @Autowired
   private AuthenticationService authService;
   
-  @RequestMapping(value = {"/", "/home"})
-  public String home(){
-    return "user/home";
-  }
-  
   @RequestMapping("/secure/home")
   public String helloWorld(){
     return "secure/hello";
