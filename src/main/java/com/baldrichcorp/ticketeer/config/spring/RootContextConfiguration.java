@@ -9,5 +9,5 @@ import org.springframework.stereotype.Controller;
     basePackages = {"com.baldrichcorp.ticketeer"}, 
     excludeFilters = @ComponentScan.Filter(Controller.class))
 public class RootContextConfiguration {
-
+  
 }

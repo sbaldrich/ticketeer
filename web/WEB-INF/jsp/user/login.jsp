@@ -2,18 +2,9 @@
 <html>
 	<head>
 		<title>Register</title>
-		<style>
-			.center {
-				margin-left: auto;
-				margin-right:auto; 
-				width: 70%;
-				/*background-color: #b0e0e6;*/
-				border-style: solid;
-				border-color:black;
-			}
-		</style>
 	</head>
 	<body class="center">
+		<h3>Please login to continue with your purchase</h3>
 		<c:if test="${loginFailed}">
 			<div class="alert alert-danger" role="alert">
 				<strong>Oh snap!</strong> Your login credentials seem to be invalid

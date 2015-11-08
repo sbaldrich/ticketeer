@@ -18,4 +18,9 @@ public class DefaultEventService implements EventService{
     return eventRepo.getAll();
   }
 
+  @Override
+  public Event get(Long id) {
+    return eventRepo.get(id);
+  }
+
 }

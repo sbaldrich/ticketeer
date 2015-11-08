@@ -54,6 +54,7 @@
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
 		<url-pattern>/secure/*</url-pattern>
+		<url-pattern>/tickets/*</url-pattern>
 	</filter-mapping>
 	
 	<jsp-config>
@@ -78,4 +79,8 @@
 
 	<distributable />
 
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error</location>
+	</error-page>
 </web-app>
