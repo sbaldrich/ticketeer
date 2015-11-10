@@ -1,7 +1,5 @@
 package com.baldrichcorp.ticketeer.web.controller;
 
-import javax.websocket.server.PathParam;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
