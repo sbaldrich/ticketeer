@@ -1,4 +1,4 @@
-package com.baldrichcorp.ticketeer.web.service;
+package com.baldrichcorp.ticketeer.service;
 
 import com.baldrichcorp.ticketeer.model.TicketOrder;
 

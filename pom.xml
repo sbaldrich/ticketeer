@@ -21,6 +21,8 @@
 		<jetty.version>9.3.1.v20150714</jetty.version>
 		<h2.version>1.4.187</h2.version>
 		<postgresql.version>9.3-1103-jdbc41</postgresql.version>
+		<spring-amqp.version>LATEST</spring-amqp.version>
+		<spring-rabbit.version>LATEST</spring-rabbit.version>
 	</properties>
 
 	<dependencies>
@@ -216,6 +218,18 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit</artifactId>
+			<version>${spring-rabbit.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-amqp</artifactId>
+			<version>${spring-amqp.version}</version>
 		</dependency>
 
 		<dependency>

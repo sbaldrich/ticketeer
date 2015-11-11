@@ -17,7 +17,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.baldrichcorp.ticketeer.model.Event;
 import com.baldrichcorp.ticketeer.model.TicketOrder;
 import com.baldrichcorp.ticketeer.service.EventService;
-import com.baldrichcorp.ticketeer.web.service.TicketService;
+import com.baldrichcorp.ticketeer.service.TicketService;
 
 @Controller
 @RequestMapping(value = "event")
