@@ -1,6 +1,8 @@
 package com.baldrichcorp.ticketeer.model;
 
-public class TicketOrder {
+import java.io.Serializable;
+
+public class TicketOrder implements Serializable{
   
   private Event event;
   private String owner;

@@ -22,6 +22,7 @@ public class DefaultTicketService implements TicketService {
   
   @Override
   public void process(TicketOrder order) {
+    logger.info("Enqueuing processing of order [ {} ] on {}", order.getOwner(), queue.getName());
     template.convertAndSend(queue.getName(), order);
     logger.info("Processing {} seats for event {}", order.getSeats(), order.getEvent().getName());
   }
