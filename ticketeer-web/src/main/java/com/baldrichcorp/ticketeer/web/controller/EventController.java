@@ -1,11 +1,12 @@
 package com.baldrichcorp.ticketeer.web.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,8 +17,10 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.baldrichcorp.ticketeer.model.Event;
 import com.baldrichcorp.ticketeer.model.TicketOrder;
+import com.baldrichcorp.ticketeer.model.User;
 import com.baldrichcorp.ticketeer.service.EventService;
 import com.baldrichcorp.ticketeer.service.TicketService;
+import com.baldrichcorp.ticketeer.service.UserService;
 
 @Controller
 @RequestMapping(value = "event")
@@ -30,6 +33,9 @@ public class EventController {
 
   @Autowired
   private TicketService ticketService;
+
+  @Autowired
+  private UserService userService;
   
   @RequestMapping(value = {"list", ""})
   public ModelAndView list(Model model){
@@ -68,9 +74,9 @@ public class EventController {
   }
   
   @RequestMapping(value = "{eventId:\\d+}/purchase", method = RequestMethod.POST)
-  public ModelAndView purchase(TicketPurchaseForm form){
-    
-    TicketOrder order = new TicketOrder(eventService.get(form.getEventId()), form.getEmail(), form.getSeats());
+  public ModelAndView purchase(TicketPurchaseForm form, HttpSession session){
+    User currentUser = userService.getByHandle( (String) session.getAttribute("username"));
+    TicketOrder order = new TicketOrder(eventService.get(form.getEventId()), currentUser, form.getSeats());
     ticketService.process(order);
 
     return new ModelAndView("event/confirmation");

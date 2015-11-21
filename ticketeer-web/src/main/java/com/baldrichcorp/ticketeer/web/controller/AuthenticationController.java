@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -20,6 +21,7 @@ import com.baldrichcorp.ticketeer.service.AuthenticationService;
 import com.baldrichcorp.ticketeer.web.form.SignupForm;
 
 @Controller
+@SessionAttributes("username")
 public class AuthenticationController {
   
   private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
@@ -27,11 +29,11 @@ public class AuthenticationController {
   @Autowired
   private AuthenticationService authService;
   
-  @RequestMapping("/secure/home")
-  public String helloWorld(){
-    return "secure/hello";
+  @RequestMapping("/")
+  public View home(){
+    return homeView();
   }
-
+  
   @RequestMapping(value = "/signup", method = RequestMethod.GET)
   public String signup(Model model){
     model.addAttribute("signupForm", new SignupForm());
@@ -51,21 +53,22 @@ public class AuthenticationController {
       return "redirect:/";
     
     model.addAttribute("signupForm", new SignupForm());
-    return "user/login";
+    return "auth/login";
   }
   
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   public View login(Model model, SignupForm form, HttpSession session, HttpServletRequest request){
     
     if(UserPrincipal.getPrincipal(session) != null)
-      return secureHomeView();
+      return UserController.userRedirectView();
     
     Principal principal = authService.authenticate(form.getHandle(), form.getPassword());
     
     if(principal != null){
       UserPrincipal.setPrincipal(session, principal);
       request.changeSessionId();
-      return secureHomeView();
+      model.addAttribute("username", form.getHandle());
+      return UserController.userRedirectView();
     }
     else{
       model.addAttribute("loginFailed", true);
@@ -74,18 +77,18 @@ public class AuthenticationController {
   }
   
   @RequestMapping("/logout")
-  public View logout(HttpSession session){
-    if(session != null)
+  public View logout(HttpSession session, Model model){
+    if(session != null){
+      session.removeAttribute("username");
       session.invalidate();
+      model.asMap().clear();
+    }
     return homeView();
   }
  
-  private View secureHomeView(){
-    return new RedirectView("secure/home", true, false);
-  }
   
   private View homeView(){
-    return new RedirectView("/home", true, false);
+    return EventController.listRedirectView();
   }
   
   private View loginView(){

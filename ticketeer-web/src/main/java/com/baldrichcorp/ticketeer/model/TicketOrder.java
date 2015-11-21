@@ -4,16 +4,25 @@ import java.io.Serializable;
 
 public class TicketOrder implements Serializable{
   
+  private Long id;
   private Event event;
-  private String owner;
+  private User owner;
   private short seats;
   
   public TicketOrder(){}
   
-  public TicketOrder(Event event, String owner, short seats) {
+  public TicketOrder(Event event, User owner, short seats) {
     this.event = event;
     this.owner = owner;
     this.seats = seats;
+  }
+  
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public Event getEvent() {
@@ -24,11 +33,11 @@ public class TicketOrder implements Serializable{
     this.event = event;
   }
   
-  public String getOwner() {
+  public User getOwner() {
     return owner;
   }
   
-  public void setOwner(String owner) {
+  public void setOwner(User owner) {
     this.owner = owner;
   }
   

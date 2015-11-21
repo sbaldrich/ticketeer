@@ -16,23 +16,28 @@ import com.baldrichcorp.ticketeer.config.spring.ServletContextConfiguration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ContextConfiguration(classes = {RootContextConfiguration.class, ServletContextConfiguration.class})
+@ContextConfiguration(classes = { RootContextConfiguration.class, ServletContextConfiguration.class })
 @WebAppConfiguration
-public class EventControllerTest extends AbstractTestNGSpringContextTests{
-  
+public class EventControllerTest extends AbstractTestNGSpringContextTests {
+
   @Autowired
   private WebApplicationContext context;
-  
+
   private MockMvc mvc;
-  
+
   @BeforeClass
-  public void setup(){
+  public void setup() {
     mvc = MockMvcBuilders.webAppContextSetup(context).build();
   }
-  
+
   @Test
-  public void listEvents() throws Exception{
-    mvc.perform(get("/event/")).andExpect(view().name("event/list"));   
+  public void listEvents() throws Exception {
+    mvc.perform(get("/event/")).andExpect(view().name("event/list"));
   }
-  
+
+  @Test
+  public void listEventsOnWelcome() throws Exception {
+    mvc.perform(get("/")).andExpect(view().name("event/list"));
+  }
+
 }
