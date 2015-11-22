@@ -28,7 +28,7 @@ public class UserController {
   @RequestMapping(value = {"", "home"})
   public ModelAndView home(Model model, HttpSession session){
     User user = userService.getByHandle((String) session.getAttribute("username"));
-    model.addAttribute("orders", ticketService.getOrdersForUser(user.getId()));
+    model.addAttribute("orders", ticketService.getOrdersForUser(user));
     return new ModelAndView("user/home");
   }
   

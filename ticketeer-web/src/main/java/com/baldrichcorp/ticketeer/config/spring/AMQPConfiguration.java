@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.baldrichcorp.ticketeer.model.TicketOrder;
 
-@Configuration
+//@Configuration
 public class AMQPConfiguration {
   
   private static final Logger logger = LoggerFactory.getLogger(AMQPConfiguration.class);
@@ -70,7 +70,7 @@ public class AMQPConfiguration {
   
   public static class Receiver{
     public void receiveMessage(TicketOrder order){
-      logger.info("Received order for owner {}", order.getOwner());
+      logger.info("Received order for owner {}", order.getUser());
     }
   }
 }

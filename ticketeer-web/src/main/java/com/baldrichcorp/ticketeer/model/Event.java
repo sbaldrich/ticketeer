@@ -3,6 +3,18 @@ package com.baldrichcorp.ticketeer.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(indexes={
+    @Index(name = "event_name", columnList = "name")
+})
 public class Event implements Serializable{
 
   private Long id;
@@ -19,7 +31,8 @@ public class Event implements Serializable{
     this.description = description;
   }
   
-  
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Long getId() {
     return id;
   }

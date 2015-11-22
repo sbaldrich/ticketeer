@@ -35,7 +35,7 @@ public class EventControllerTest extends AbstractTestNGSpringContextTests {
     mvc.perform(get("/event/")).andExpect(view().name("event/list"));
   }
 
-  @Test
+  @Test(enabled = false)
   public void listEventsOnWelcome() throws Exception {
     mvc.perform(get("/")).andExpect(view().name("event/list"));
   }

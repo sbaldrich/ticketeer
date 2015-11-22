@@ -2,6 +2,18 @@ package com.baldrichcorp.ticketeer.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+@Entity
+@Table(name="customer", uniqueConstraints = {
+    @UniqueConstraint(name = "unique_handle", columnNames= "handle") 
+    },indexes = {
+        @Index(name = "handle_index", columnList = "handle")
+    })
 public class User implements Serializable{
 
   private Long id;
@@ -18,6 +30,7 @@ public class User implements Serializable{
     this.email = email;
   }
 
+  @Id
   public Long getId() {
     return id;
   }
