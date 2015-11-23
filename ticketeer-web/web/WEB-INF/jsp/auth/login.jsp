@@ -10,7 +10,7 @@
 				<strong>Oh snap!</strong> Your login credentials seem to be invalid
 			</div>
 		</c:if>
-		<div style="padding: 2% 5%">
+		<div>
 			<form:form method="post" modelAttribute="signupForm">
 				<form:label path="handle">handle</form:label>
 				<br />
@@ -20,8 +20,9 @@
 				<br />
 				<form:password path="password" />
 				<br />
-				<input type="submit" value="Sign Up" />
+				<input type="submit" value="Log in" />
 			</form:form>
+			<span>Don't have an account yet? <a href="<c:url value="/signup"/>">sign up</a></span>
 		</div>
 	</div>
 </body>

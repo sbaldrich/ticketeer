@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.baldrichcorp.ticketeer.model.TicketOrder;
 
-//@Configuration
+@Configuration
 public class AMQPConfiguration {
   
   private static final Logger logger = LoggerFactory.getLogger(AMQPConfiguration.class);

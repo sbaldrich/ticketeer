@@ -1,7 +1,7 @@
 package com.baldrichcorp.ticketeer.service;
 
-import com.baldrichcorp.ticketeer.model.User;
+import com.baldrichcorp.ticketeer.model.UserPrincipal;
 
 public interface UserService {
-  User getByHandle(String handle);
+  UserPrincipal getByHandle(String handle);
 }

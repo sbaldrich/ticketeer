@@ -3,6 +3,8 @@ package com.baldrichcorp.ticketeer.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -11,18 +13,19 @@ public class TicketOrder implements Serializable{
   
   private Long id;
   private Event event;
-  private User user;
+  private UserPrincipal user;
   private short seats;
   
   public TicketOrder(){}
   
-  public TicketOrder(Event event, User user, short seats) {
+  public TicketOrder(Event event, UserPrincipal user, short seats) {
     this.event = event;
     this.user = user;
     this.seats = seats;
   }
   
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Long getId() {
     return id;
   }
@@ -41,11 +44,11 @@ public class TicketOrder implements Serializable{
   }
   
   @ManyToOne
-  public User getUser() {
+  public UserPrincipal getUser() {
     return user;
   }
   
-  public void setUser(User owner) {
+  public void setUser(UserPrincipal owner) {
     this.user = owner;
   }
   

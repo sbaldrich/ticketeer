@@ -2,6 +2,7 @@ package com.baldrichcorp.ticketeer.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 
 @Entity
@@ -18,13 +21,13 @@ import javax.persistence.Table;
 public class Event implements Serializable{
 
   private Long id;
-  private LocalDateTime date;
+  private Date date;
   private String name;
   private String description;
  
   public Event() {}
   
-  public Event(Long id, LocalDateTime date, String name, String description){
+  public Event(Long id, Date date, String name, String description){
     this.id = id;
     this.date = date;
     this.name = name;
@@ -41,11 +44,12 @@ public class Event implements Serializable{
     this.id = id;
   }
 
-  public LocalDateTime getDate() {
+  @Temporal(TemporalType.TIMESTAMP)
+  public Date getDate() {
     return date;
   }
   
-  public void setDate(LocalDateTime date) {
+  public void setDate(Date date) {
     this.date = date;
   }
   

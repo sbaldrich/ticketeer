@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -37,12 +38,14 @@ public class AuthenticationController {
   @RequestMapping(value = "/signup", method = RequestMethod.GET)
   public String signup(Model model){
     model.addAttribute("signupForm", new SignupForm());
-    return "user/signup";
+    return "auth/signup";
   }
   
   @RequestMapping(value = "/signup", method = RequestMethod.POST)
-  public View signup(SignupForm form){
-    authService.register(form.getHandle(), form.getPassword());
+  public ModelAndView signup(SignupForm form){
+    UserPrincipal user = new UserPrincipal();
+    user.setHandle(form.getHandle());
+    authService.saveUser(user, form.getPassword());
     return loginView();
   }
   
@@ -57,10 +60,10 @@ public class AuthenticationController {
   }
   
   @RequestMapping(value = "/login", method = RequestMethod.POST)
-  public View login(Model model, SignupForm form, HttpSession session, HttpServletRequest request){
+  public ModelAndView login(Model model, SignupForm form, HttpSession session, HttpServletRequest request){
     
     if(UserPrincipal.getPrincipal(session) != null)
-      return UserController.userRedirectView();
+      return new ModelAndView(UserController.userRedirectView());
     
     Principal principal = authService.authenticate(form.getHandle(), form.getPassword());
     
@@ -68,11 +71,11 @@ public class AuthenticationController {
       UserPrincipal.setPrincipal(session, principal);
       request.changeSessionId();
       model.addAttribute("username", form.getHandle());
-      return UserController.userRedirectView();
+      return new ModelAndView(UserController.userRedirectView());
     }
     else{
       model.addAttribute("loginFailed", true);
-      return loginView();
+      return new ModelAndView("auth/login");
     }
   }
   
@@ -91,7 +94,7 @@ public class AuthenticationController {
     return EventController.listRedirectView();
   }
   
-  private View loginView(){
-    return new RedirectView("/login", true, false);
+  private ModelAndView loginView(){
+    return new ModelAndView(new RedirectView("/login", true, false));
   }
 }

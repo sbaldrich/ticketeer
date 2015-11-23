@@ -17,7 +17,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.baldrichcorp.ticketeer.model.Event;
 import com.baldrichcorp.ticketeer.model.TicketOrder;
-import com.baldrichcorp.ticketeer.model.User;
+import com.baldrichcorp.ticketeer.model.UserPrincipal;
 import com.baldrichcorp.ticketeer.service.EventService;
 import com.baldrichcorp.ticketeer.service.TicketService;
 import com.baldrichcorp.ticketeer.service.UserService;
@@ -51,67 +51,6 @@ public class EventController {
     }
     model.addAttribute("event", event);
     return new ModelAndView("event/view");
-  }
-  
-  @RequestMapping(value = "{eventId:\\d+}/purchase", method = RequestMethod.GET)
-  public ModelAndView purchase(@PathVariable long eventId, 
-      @RequestParam(value = "section", defaultValue = "general") String section, Model model){
-    
-    logger.info("Getting information about the {} tickets for event {}", section, eventId);
-    
-    TicketPurchaseForm form = new TicketPurchaseForm();
-    Event event = eventService.get(eventId);
-    
-    if(event == null){
-      return listRedirectModelAndView(); 
-    }
-    
-    form.setEventId(event.getId());
-    model.addAttribute("event", event);
-    model.addAttribute("form", form);
-    
-    return new ModelAndView("/event/purchase");
-  }
-  
-  @RequestMapping(value = "{eventId:\\d+}/purchase", method = RequestMethod.POST)
-  public ModelAndView purchase(TicketPurchaseForm form, HttpSession session){
-    User currentUser = userService.getByHandle( (String) session.getAttribute("username"));
-    TicketOrder order = new TicketOrder(eventService.get(form.getEventId()), currentUser, form.getSeats());
-    ticketService.process(order);
-
-    return new ModelAndView("event/confirmation");
-  }
-  
-  static class TicketPurchaseForm{
- 
-    private long eventId;
-    private short seats;
-    private String email;
-    
-    public long getEventId() {
-      return eventId;
-    }
-
-    public void setEventId(long eventId) {
-      this.eventId = eventId;
-    }
-
-    public short getSeats() {
-      return seats;
-    }
-    
-    public void setSeats(short seats) {
-      this.seats = seats;
-    }
-
-    public String getEmail() {
-      return email;
-    }
-
-    public void setEmail(String email) {
-      this.email = email;
-    }
-        
   }
   
   public static ModelAndView listRedirectModelAndView(){

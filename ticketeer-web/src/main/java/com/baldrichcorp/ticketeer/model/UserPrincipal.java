@@ -1,32 +1,75 @@
 package com.baldrichcorp.ticketeer.model;
 
-import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.security.Principal;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
+import javax.servlet.http.HttpSession;
+
+@Entity
+@Table(uniqueConstraints = {
+    @UniqueConstraint(name = "unique_handle", columnNames= "handle") 
+    },indexes = {
+        @Index(name = "handle_index", columnList = "handle")
+    })
 public class UserPrincipal implements Principal, Cloneable, Serializable {
 
   private static final String PRINCIPAL_ATTRIBUTE = "com.baldrichcorp.user.principal";
   
-  private final String username;
-
-  public UserPrincipal(String username) {
-    this.username = username;
+  private Long id;
+  private String handle;
+  private String email;
+  private byte[] password;
+  
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public Long getId() {
+    return id;
   }
 
-  @Override
-  public String getName() {
-    return this.username;
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getHandle() {
+    return handle;
+  }
+
+  public void setHandle(String handle) {
+    this.handle = handle;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public byte[] getPassword() {
+    return password;
+  }
+
+  public void setPassword(byte[] password) {
+    this.password = password;
   }
 
   @Override
   public int hashCode() {
-    return this.username.hashCode();
+    return this.handle.hashCode();
   }
 
   @Override
   public boolean equals(Object other) {
-    return other instanceof UserPrincipal && ((UserPrincipal) other).username.equals(this.username);
+    return other instanceof UserPrincipal && ((UserPrincipal) other).handle.equals(this.handle);
   }
 
   @Override
@@ -40,7 +83,7 @@ public class UserPrincipal implements Principal, Cloneable, Serializable {
 
   @Override
   public String toString() {
-    return this.username;
+    return this.handle;
   }
 
   public static Principal getPrincipal(HttpSession session) {
@@ -49,5 +92,11 @@ public class UserPrincipal implements Principal, Cloneable, Serializable {
 
   public static void setPrincipal(HttpSession session, Principal principal) {
     session.setAttribute(PRINCIPAL_ATTRIBUTE, principal);
+  }
+
+  @Override
+  @Transient
+  public String getName() {
+    return this.handle;
   }
 }

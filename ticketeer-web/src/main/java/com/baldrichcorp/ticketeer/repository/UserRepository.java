@@ -1,11 +1,9 @@
 package com.baldrichcorp.ticketeer.repository;
 
-import com.baldrichcorp.ticketeer.model.User;
+import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends GenericRepository<Long, User>{
-  
-  public String getPasswordForUser(String handle);
-  
-  public void addUser(String handle, String password);
+import com.baldrichcorp.ticketeer.model.UserPrincipal;
 
+public interface UserRepository extends CrudRepository<UserPrincipal, Long>{
+  UserPrincipal findByHandle(String handle);
 }

@@ -15,12 +15,12 @@ public class DefaultEventService implements EventService{
   
   @Override
   public Iterable<Event> getAll() {
-    return eventRepo.getAll();
+    return eventRepo.findAll();
   }
 
   @Override
   public Event get(Long id) {
-    return eventRepo.get(id);
+    return eventRepo.findOne(id);
   }
 
 }

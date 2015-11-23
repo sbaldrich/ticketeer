@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.baldrichcorp.ticketeer.model.User;
+import com.baldrichcorp.ticketeer.model.UserPrincipal;
 import com.baldrichcorp.ticketeer.service.TicketService;
 import com.baldrichcorp.ticketeer.service.UserService;
 
@@ -27,7 +27,7 @@ public class UserController {
   
   @RequestMapping(value = {"", "home"})
   public ModelAndView home(Model model, HttpSession session){
-    User user = userService.getByHandle((String) session.getAttribute("username"));
+    UserPrincipal user = userService.getByHandle((String) session.getAttribute("username"));
     model.addAttribute("orders", ticketService.getOrdersForUser(user));
     return new ModelAndView("user/home");
   }
