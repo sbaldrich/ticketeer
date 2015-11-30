@@ -12,6 +12,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.servlet.http.HttpSession;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Email;
 
 @Entity
 @Table(uniqueConstraints = {
@@ -24,7 +27,10 @@ public class UserPrincipal implements Principal, Cloneable, Serializable {
   private static final String PRINCIPAL_ATTRIBUTE = "com.baldrichcorp.user.principal";
   
   private Long id;
+  @NotNull(message="{validation.fieldNotNull}")
   private String handle;
+  @NotNull(message="{validation.fieldNotNull}")
+  @Email(message="{validation.email}")
   private String email;
   private byte[] password;
   
@@ -41,7 +47,7 @@ public class UserPrincipal implements Principal, Cloneable, Serializable {
   public String getHandle() {
     return handle;
   }
-
+  
   public void setHandle(String handle) {
     this.handle = handle;
   }

@@ -2,15 +2,13 @@ package com.baldrichcorp.ticketeer.web.form;
 
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
-public class SignupForm {
+public class LoginForm {
   
-  @Size(min = 3, max = 10, message = "{validation.signup.handle}")
+  @Size(min = 3, max = 10, message = "{validation.login.handle}")
   private String handle;
-  @Email(message = "{validation.signup.email}")
-  private String email;
-  @Size(min = 6, message = "{validation.signup.password}")
+  @NotEmpty(message = "{validation.login.password}")
   private String password;
  
   
@@ -20,14 +18,6 @@ public class SignupForm {
   
   public void setHandle(String handle) {
     this.handle = handle;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
   }
 
   public String getPassword() {

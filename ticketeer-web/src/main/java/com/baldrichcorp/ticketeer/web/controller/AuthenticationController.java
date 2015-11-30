@@ -4,12 +4,14 @@ import java.security.Principal;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.baldrichcorp.ticketeer.model.UserPrincipal;
 import com.baldrichcorp.ticketeer.service.AuthenticationService;
+import com.baldrichcorp.ticketeer.web.form.LoginForm;
 import com.baldrichcorp.ticketeer.web.form.SignupForm;
 
 @Controller
@@ -36,34 +39,42 @@ public class AuthenticationController {
   }
   
   @RequestMapping(value = "/signup", method = RequestMethod.GET)
-  public String signup(Model model){
+  public ModelAndView signup(Model model){
     model.addAttribute("signupForm", new SignupForm());
-    return "auth/signup";
+    return signupModelAndView();
   }
   
   @RequestMapping(value = "/signup", method = RequestMethod.POST)
-  public ModelAndView signup(SignupForm form){
+  public String signup(@Valid SignupForm form, Errors errors, Model model){
+    if(errors.hasErrors()){
+      return "auth/signup";
+    }
     UserPrincipal user = new UserPrincipal();
     user.setHandle(form.getHandle());
     authService.saveUser(user, form.getPassword());
-    return loginView();
+    model.asMap().remove("signupForm");
+    return "redirect:/login";
   }
   
   @RequestMapping(value = "/login", method = RequestMethod.GET)
-  public String login(Model model, HttpSession session, HttpServletRequest request){
+  public ModelAndView login(Model model, HttpSession session, HttpServletRequest request){
     
     if(UserPrincipal.getPrincipal(session) != null)
-      return "redirect:/";
+      return UserController.userRedirectModelAndView();
     
-    model.addAttribute("signupForm", new SignupForm());
-    return "auth/login";
+    return loginModelAndView(model);
   }
   
   @RequestMapping(value = "/login", method = RequestMethod.POST)
-  public ModelAndView login(Model model, SignupForm form, HttpSession session, HttpServletRequest request){
+  public ModelAndView login(@Valid LoginForm form, Errors errors, Model model, HttpSession session, HttpServletRequest request){
     
     if(UserPrincipal.getPrincipal(session) != null)
       return new ModelAndView(UserController.userRedirectView());
+    
+    if(errors.hasErrors()){
+      model.addAttribute("loginFailed", true);
+      return loginModelAndView(model);
+    }
     
     Principal principal = authService.authenticate(form.getHandle(), form.getPassword());
     
@@ -75,7 +86,7 @@ public class AuthenticationController {
     }
     else{
       model.addAttribute("loginFailed", true);
-      return new ModelAndView("auth/login");
+      return loginModelAndView(model);
     }
   }
   
@@ -94,7 +105,14 @@ public class AuthenticationController {
     return EventController.listRedirectView();
   }
   
-  private ModelAndView loginView(){
-    return new ModelAndView(new RedirectView("/login", true, false));
+  private ModelAndView signupModelAndView(){
+    return new ModelAndView("auth/signup");
   }
+  
+  private ModelAndView loginModelAndView(Model model){
+    model.addAttribute("loginform", new LoginForm());
+    return new ModelAndView("auth/login");
+  }
+  
+  
 }

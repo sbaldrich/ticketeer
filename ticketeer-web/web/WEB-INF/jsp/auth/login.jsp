@@ -7,11 +7,11 @@
 	<div id="container" class="center">
 		<c:if test="${loginFailed}">
 			<div class="alert alert-danger" role="alert">
-				<strong>Oh snap!</strong> Your login credentials seem to be invalid
+				<strong>Oh snap!</strong> Your login credentials seem to be invalid.
 			</div>
 		</c:if>
 		<div>
-			<form:form method="post" modelAttribute="signupForm">
+			<form:form method="post" modelAttribute="loginform">
 				<form:label path="handle">handle</form:label>
 				<br />
 				<form:input path="handle" />

@@ -7,13 +7,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 public class TicketOrder implements Serializable{
   
   private Long id;
+  
+  @NotNull(message="{validation.fieldNotNull}")
+  @Valid
   private Event event;
+  @NotNull(message="{validation.fieldNotNull}")
+  @Valid
   private UserPrincipal user;
+  @Range(min = 1, max = 100, message="{validation.numeric.positive}")
   private short seats;
   
   public TicketOrder(){}

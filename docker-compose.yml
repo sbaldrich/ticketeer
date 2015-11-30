@@ -1,0 +1,14 @@
+web:
+  build: .
+  container_name: ticketeer-web
+  ports:
+    - "8080:8080"
+  links:
+    - postgres
+postgres:
+  image: postgres:9.3
+  container_name: ticketeer-db
+  environment:
+    POSTGRES_PASSWORD: pwd
+  ports:
+    - "5432:5432"
