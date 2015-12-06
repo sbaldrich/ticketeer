@@ -1,17 +1,23 @@
 package com.baldrichcorp.ticketeer.web.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.baldrichcorp.ticketeer.model.Event;
 import com.baldrichcorp.ticketeer.model.TicketOrder;
@@ -34,8 +40,8 @@ private static final Logger logger = LoggerFactory.getLogger(EventController.cla
   @Autowired
   private UserService userService;
     
-  @RequestMapping(value = "/secure/{eventId:\\d+}/purchase", method = RequestMethod.GET)
-  public ModelAndView purchase(@PathVariable long eventId,
+  @RequestMapping(value = "/secure/purchase", method = RequestMethod.GET)
+  public ModelAndView purchase(@RequestParam(value = "event") long eventId,
       @RequestParam(value = "section", defaultValue = "general") String section, Model model) {
 
     logger.info("Getting information about the {} tickets for event {}", section, eventId);
@@ -47,34 +53,44 @@ private static final Logger logger = LoggerFactory.getLogger(EventController.cla
       return EventController.listRedirectModelAndView();
     }
 
-    form.setEventId(event.getId());
+    form.setEvent(event);
+    form.setSeats((short)2);
     model.addAttribute("event", event);
-    model.addAttribute("form", form);
+    model.addAttribute("ticketPurchaseForm", form);
 
     return new ModelAndView("/secure/purchase");
   }
 
-  @RequestMapping(value = "/secure/{eventId:\\d+}/purchase", method = RequestMethod.POST)
-  public ModelAndView purchase(TicketPurchaseForm form, HttpSession session) {
+  @RequestMapping(value = "/secure/purchase", method = RequestMethod.POST)
+  public ModelAndView purchase(@Valid TicketPurchaseForm form, Errors errors, Model model, HttpSession session) {
+    if(errors.hasErrors()){
+      return new ModelAndView("secure/purchase");
+    }
     UserPrincipal currentUser = userService.getByHandle((String) session.getAttribute("username"));
-    TicketOrder order = new TicketOrder(eventService.get(form.getEventId()), currentUser, form.getSeats());
+    TicketOrder order = new TicketOrder(eventService.get(form.getEvent().getId()), currentUser, form.getSeats());
     ticketService.process(order);
 
     return new ModelAndView("secure/confirmation");
   }
-
+  
+  
   static class TicketPurchaseForm {
-
-    private long eventId;
+    
+    @NotNull
+    private Event event;
+    @Range(min = 1, max = 10, message= "{validation.seats}")
     private short seats;
+    @NotNull(message="{validation.signup.email}")
+    @NotEmpty(message="{validation.signup.email}")
+    @Email(message="{validation.signup.email}")
     private String email;
 
-    public long getEventId() {
-      return eventId;
+    public Event getEvent() {
+      return event;
     }
 
-    public void setEventId(long eventId) {
-      this.eventId = eventId;
+    public void setEvent(Event event) {
+      this.event = event;
     }
 
     public short getSeats() {

@@ -1,3 +1,4 @@
+
 package com.baldrichcorp.ticketeer.web.controller;
 
 import java.security.Principal;
@@ -17,12 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.baldrichcorp.ticketeer.model.UserPrincipal;
 import com.baldrichcorp.ticketeer.service.AuthenticationService;
 import com.baldrichcorp.ticketeer.web.form.LoginForm;
 import com.baldrichcorp.ticketeer.web.form.SignupForm;
+import com.baldrichcorp.ticketeer.web.form.ValidationForm;
 
 @Controller
 @SessionAttributes("username")
@@ -51,6 +52,7 @@ public class AuthenticationController {
     }
     UserPrincipal user = new UserPrincipal();
     user.setHandle(form.getHandle());
+    user.setEmail(form.getEmail());
     authService.saveUser(user, form.getPassword());
     model.asMap().remove("signupForm");
     return "redirect:/login";
@@ -99,7 +101,6 @@ public class AuthenticationController {
     }
     return homeView();
   }
- 
   
   private View homeView(){
     return EventController.listRedirectView();

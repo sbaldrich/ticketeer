@@ -7,9 +7,13 @@
 		<p>
 			<c:out value="${event.description}" />
 		</p>
-		<a href="<c:url value="/secure/${event.id}/purchase" />">Buy
+		<a href="<c:url value="/secure/purchase">
+				<c:param name="event" value="${event.id}"/>
+				<c:param name="section" value="general"/>
+				</c:url>">Buy
 			general tickets</a> <br /> <a
-			href="<c:url value="/secure/${event.id}/purchase">
+			href="<c:url value="/secure/purchase">
+			<c:param name="event" value="${event.id}"/>
 			<c:param name="section" value="vip"/>
 		</c:url>">Buy vip tickets</a>
 	</div>
